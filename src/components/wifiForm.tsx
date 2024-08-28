@@ -6,7 +6,7 @@ type Props = {
 }
 
 export function WifiForm({setText}: Props) {
-    const [ssid, setSsid] = useState("hi");
+    const [ssid, setSsid] = useState("");
     const [password, setPassword] = useState("");
 
     useEffect(() => {

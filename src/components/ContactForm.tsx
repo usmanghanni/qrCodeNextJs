@@ -17,7 +17,7 @@ export function ContactForm({setText}: Props) {
                 setText("");
             }
         }
-        , [name, email, phone]);
+        , [name, email, phone, url, org]);
     return (
         <>
             <InputWithLabel setText={setName} id="name" label="Name" placeholder="Name" value={name} type="text"/>

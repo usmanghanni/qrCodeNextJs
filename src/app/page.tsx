@@ -1,21 +1,58 @@
 "use client";
 import GenerateQrCode from "@/components/generateQrCode";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {WifiForm} from "@/components/wifiForm";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select"
 import {ContactForm} from "@/components/ContactForm";
 import {Label} from "@/components/ui/label";
 import {SimpleText} from "@/components/simpleText";
+import {useDebounce} from "@/hooks/useDebounce";
+import {Button} from "@/components/ui/button";
 
 export default function Home() {
-    const [text, setText] = useState("hi");
-    const [type, setType] = useState("wifi");
+    const [text, setText] = useState("");
+    const [type, setType] = useState("");
     const [bgColor, setBgColor] = useState("#000000");
     const [fgColor, setFgColor] = useState("#ffffff");
-    useEffect(() => {
-            console.log(type);
+    const debouncedBgColor = useDebounce(bgColor);
+    const debouncedFgColor = useDebounce(fgColor);
+    const debouncedText = useDebounce(text);
+
+
+    function downloadImage() {
+        if (!document.getElementsByTagName('img')[0]) {
+            return
         }
-        , [type]);
+        // download-button
+        const downloadButton = document.getElementById('download-button');
+        if (!downloadButton) {
+            return
+        }
+        downloadButton.innerText = 'Downloading...';
+        downloadButton.setAttribute('disabled', 'true');
+
+
+        console.log(document.getElementsByTagName('img')[0].src);
+        const link = document.createElement('a');
+        link.href = document.getElementsByTagName('img')[0].src;
+        link.download = 'QRCode.png';
+        // delay a bit to show the downloading text
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => {
+            downloadButton.innerText = 'Download';
+            downloadButton.removeAttribute('disabled');
+        }, 1000);
+    }
+
+    function remount() {
+        setText("");
+        setBgColor("#000000");
+        setFgColor("#ffffff");
+        setType("");
+    }
 
     return (
         <main
@@ -24,8 +61,9 @@ export default function Home() {
         >
             <h1 className="text-5xl text-center font-bold mb-16 ">QR Code</h1>
             <div
-                className="grid  bg-gray-200 justify-between  shadow-2xl shadow-black rounded-lg border-[1px] border-gray-300  lg:grid-cols-2 sm:grid-cols-1 md:grid-cols-1">
-                <div className="w-full bg-red-500 shadow-lg p-5 px-8 grid-cols-2">
+                className="grid   justify-between  shadow-2xl shadow-black   lg:grid-cols-2 sm:grid-cols-1 md:grid-cols-1">
+                <div
+                    className="w-full dark:bg-secondary light:bg-secondary dark:text-gray-300 light:text-white p-5 px-8 grid-cols-2">
                     <div className="grid w-full max-w-sm items-center mb-2">
                         <Select onValueChange={(value) => setType(value)} value={type}>
                             <SelectTrigger className="w-[180px]">
@@ -56,23 +94,29 @@ export default function Home() {
                             onChange={(e) => setFgColor(e.target.value)}
                         />
                     </div>
+
                     {type === "wifi" && <WifiForm setText={setText}/>}
                     {type === "contact" && <ContactForm setText={setText}/>}
-                    {type === "text" && <SimpleText text={text} setText={setText}/>  }
-
-
+                    {type === "text" && <SimpleText text={text} setText={setText}/>}
+                    <div className="grid w-full max-w-sm items-center mb-2">
+                        <Button onClick={remount}>Clear</Button>
+                    </div>
+                    <div className="grid w-full max-w-sm items-center mb-2">
+                        {/*Download generated Imgae*/}
+                        <Button id={'download-button'} disabled={false} onClick={downloadImage}>Download</Button>
+                    </div>
 
 
                 </div>
 
-                <div className="w-full bg-zinc-50 float-right grid-cols-2">
-                    {text && (
-                        <GenerateQrCode text={text} options={
+                <div className=" h-full  p-2  grid-cols-2">
+                    {debouncedText && (
+                        <GenerateQrCode text={debouncedText} options={
                             {
                                 width: 500,
                                 color: {
-                                    dark: fgColor,
-                                    light: bgColor,
+                                    dark: debouncedFgColor,
+                                    light: debouncedBgColor,
                                 }
 
                             }

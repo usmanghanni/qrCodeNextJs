@@ -9,13 +9,14 @@ type Props = {
     placeholder: string;
     value: string;
     type: 'text' | 'password' | 'email' | 'tel' | 'color' | 'url';
-}
+} & React.HTMLProps<HTMLInputElement>;
 
-export function InputWithLabel({setText, id, placeholder,label, value, type = 'text'}: Props) {
+export function InputWithLabel({setText, id, placeholder,label, value, type = 'text',...props}: Props) {
     return (
         <div className={"grid w-full max-w-sm items-center mb-2"}>
             <Label className="mb-2" htmlFor="text">{label}</Label>
             <Input
+                {...props}
                 type={type}
                 id={id}
                 value={value}

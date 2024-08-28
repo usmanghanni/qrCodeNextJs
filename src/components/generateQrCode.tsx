@@ -13,17 +13,20 @@ type Props = {
     };
 };
 export default function GenerateQrCode({ text, options }: Props) {
-    const { SVG } = useQRCode();
+    const { SVG,Image,Canvas } = useQRCode();
     return (
-        <SVG
+        // eslint-disable-next-line jsx-a11y/alt-text
+        <Image
+            key={'qr-code'}
+
             text={text}
             options={{
                 errorCorrectionLevel: "M",
                 margin: 3,
                 width: 400,
                 color: {
-                    dark: "#010599FF",
-                    light: "#FFBF60FF",
+                    dark: "#000000",
+                    light: "#FFFFFF",
                 },
                 ...options,
             }}
