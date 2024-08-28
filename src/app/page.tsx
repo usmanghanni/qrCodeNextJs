@@ -1,113 +1,85 @@
-import Image from "next/image";
+"use client";
+import GenerateQrCode from "@/components/generateQrCode";
+import {useEffect, useState} from "react";
+import {WifiForm} from "@/components/wifiForm";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select"
+import {ContactForm} from "@/components/ContactForm";
+import {Label} from "@/components/ui/label";
+import {SimpleText} from "@/components/simpleText";
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    const [text, setText] = useState("hi");
+    const [type, setType] = useState("wifi");
+    const [bgColor, setBgColor] = useState("#000000");
+    const [fgColor, setFgColor] = useState("#ffffff");
+    useEffect(() => {
+            console.log(type);
+        }
+        , [type]);
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
+    return (
+        <main
+            className="w-2/3
+             mt-36 my-0 mx-auto"
         >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+            <h1 className="text-5xl text-center font-bold mb-16 ">QR Code</h1>
+            <div
+                className="grid  bg-gray-200 justify-between  shadow-2xl shadow-black rounded-lg border-[1px] border-gray-300  lg:grid-cols-2 sm:grid-cols-1 md:grid-cols-1">
+                <div className="w-full bg-red-500 shadow-lg p-5 px-8 grid-cols-2">
+                    <div className="grid w-full max-w-sm items-center mb-2">
+                        <Select onValueChange={(value) => setType(value)} value={type}>
+                            <SelectTrigger className="w-[180px]">
+                                <SelectValue placeholder="Select Type"/>
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="wifi">WIFI</SelectItem>
+                                <SelectItem value="contact">Contact</SelectItem>
+                                <SelectItem value="text">Text</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="grid w-full max-w-sm items-center mb-2">
+                        <Label className="mb-2" htmlFor="bgColor">Background Color</Label>
+                        <input
+                            type="color"
+                            id="bgColor"
+                            value={bgColor}
+                            onChange={(e) => setBgColor(e.target.value)}
+                        />
+                    </div>
+                    <div className="grid w-full max-w-sm items-center mb-2">
+                        <Label className="mb-2" htmlFor="fgColor">Foreground Color</Label>
+                        <input
+                            type="color"
+                            id="fgColor"
+                            value={fgColor}
+                            onChange={(e) => setFgColor(e.target.value)}
+                        />
+                    </div>
+                    {type === "wifi" && <WifiForm setText={setText}/>}
+                    {type === "contact" && <ContactForm setText={setText}/>}
+                    {type === "text" && <SimpleText text={text} setText={setText}/>  }
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+
+                </div>
+
+                <div className="w-full bg-zinc-50 float-right grid-cols-2">
+                    {text && (
+                        <GenerateQrCode text={text} options={
+                            {
+                                width: 500,
+                                color: {
+                                    dark: fgColor,
+                                    light: bgColor,
+                                }
+
+                            }
+                        }/>
+                    )}
+                </div>
+            </div>
+        </main>
+    );
 }
