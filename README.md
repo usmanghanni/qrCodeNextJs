@@ -55,7 +55,7 @@ A component to generate and display a QR code.
 
 1. Clone the repository:
     ```sh
-    git clone <repository-url>
+    git clone https://github.com/usmanghanni/qrCodeNextJs.git
     ```
 2. Navigate to the project directory:
     ```sh
